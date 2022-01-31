@@ -3,7 +3,8 @@
         <div class="modal-wrap" ref="modalWrap">
             <label for="city-name">Enter Location:</label>
             <input type="text" name="city-name" placeholder="Warszawa/Warsaw" v-model="city">
-            <button @click="addCity">Add</button>
+            <button @click="addCity">Add <i class="fas fa-plus"></i></button>
+            <button ref="x" @click="closeModal" class="mar">Cancel <i class="far fa-window-close"></i></button>
         </div>
     </div>
 </template>
@@ -22,19 +23,34 @@ import db from "../firebase/firebaseinit";
      },
      methods: {
          closeModal(e){
-             if(e.target === this.$refs.modal)
+              if(e.target === this.$refs.x)
+                this.$emit('close-modal');
+
+             if(e.target === this.$refs.modal && e.target !== this.$refs.x)
                 this.$emit('close-modal');
 
          },
          async addCity(){
            console.log(this.cities);
              if(this.city === ""){
-               alert("Input field cannot be empty");
+                  this.$notify({
+                  group: 'foo',
+                  title: 'Info',
+                  type:'danger',
+                  duration:5000,
+                  text: `Input field cannot be empty`
+                });
                  return false
              }
              let test = this.cities.filter(el=>el.city == this.city);
              if(test.length != 0){
-               alert(`We are sorry...${this.city} already exists in your app.`);
+                  this.$notify({
+                  group: 'foo',
+                  title: 'Info',
+                  type:'danger',
+                  duration:5000,
+                  text: `We are sorry...${this.city} already exists in your app.`
+                });
                return false;
              }
              try{
@@ -45,9 +61,22 @@ import db from "../firebase/firebaseinit";
                  currentWeather:data
              }).then(()=>{
                 this.$emit('close-modal');
+                this.$notify({
+                  group: 'foo',
+                  title: 'Info',
+                  type:'success',
+                  duration:5000,
+                  text: 'City has been addedd succesfully'
+                });
              })
              }catch(err){
-               alert(`We are sory...${this.city}, does not exist in our record. Please try again.`)
+                  this.$notify({
+                  group: 'foo',
+                  title: 'Info',
+                  type:'danger',
+                  duration:5000,
+                  text: `We are sory...${this.city}, does not exist in our record. Please try again.`
+                });
              }
 
              
@@ -58,6 +87,12 @@ import db from "../firebase/firebaseinit";
 </script>
 
 <style lang="scss" scoped>
+.mar{
+  position: absolute;
+  right:0;
+  top:0;
+  cursor: pointer;
+}
 .modal {
   z-index: 101;
   background: rgba(0, 0, 0, 0.5);
@@ -72,6 +107,7 @@ import db from "../firebase/firebaseinit";
   }
   .modal-wrap {
     max-width: 500px;
+    position:relative;
     border-radius: 8px;
     width: 80%;
     padding: 20px;
@@ -96,6 +132,7 @@ import db from "../firebase/firebaseinit";
       border-radius: 8px;
       border: none;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
     }
   }
 }

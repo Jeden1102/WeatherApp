@@ -5,9 +5,10 @@
       <span></span>
     </div>
     <div class="app" v-else>
+    <notifications group="foo"  position="bottom right"/>
     <Navigation v-on:add-city="modalOpen = !modalOpen" v-on:edit-city="edit = !edit" :addCityActive="addCityActive" :isDay="isDay" :isNight="isNight"/>
     <Modal  v-if="modalOpen" v-on:close-modal="modalOpen = !modalOpen" :cities="cities" />
-    <router-view :cities="cities" :edit="edit" v-on:is-day="isDay = !isDay" v-on:is-night="isNight = !isNight" v-on:resetDays="resetDays" :isDay="isDay" :isNight="isNight" v-on:add-city="modalOpen = !modalOpen"/>
+    <router-view :cities="cities" :edit="edit" v-on:is-day="isDay = !isDay" v-on:is-night="isNight = !isNight" v-on:resetDays="resetDays" :isDay="isDay" :isNight="isNight" v-on:add-city="testFunction"/>
     </div>
 
   </div>
@@ -19,7 +20,6 @@ import axios from 'axios';
 import db from "./firebase/firebaseinit";
 import Navigation from './components/Navigation.vue';
 import Modal from './components/Modal.vue';
-
 export default {
 
   name:"App",
@@ -69,6 +69,15 @@ export default {
         })
       })
     },
+    testFunction(){
+      console.log("ok")
+      this.modalOpen = !this.modalOpen;
+      this.$notify({
+        group: 'foo',
+        title: 'Important message',
+        text: 'Hello user! This is a notification!'
+      });
+    },
     resetDays(){
       this.isDay = false;
       this.isNight = false;
@@ -94,6 +103,33 @@ export default {
 }
 </script>
 <style lang="scss">
+//notificnation
+.vue-notification {
+  padding: 30px;
+  margin: 0 5px 5px;
+ 
+  font-size: 24px !important;
+ 
+  color: #ffffff;
+  background: #44A4FC;
+  border-left: 5px solid #187FE7;
+ 
+  &.warn {
+    background: #ffb648;
+    border-left-color: #f48a06;
+  }
+ 
+  &.error {
+    background: #E54D42;
+    border-left-color: #B82E24;
+  }
+ 
+  &.success {
+    background: #68CD86;
+    border-left-color: #42A85F;
+  }
+}
+//
 .loading {
   @keyframes spin {
     to {

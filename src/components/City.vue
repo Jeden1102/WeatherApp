@@ -9,7 +9,6 @@
         <div class="video">
             <video autoplay muted loop :src="require(`../../public/videos/${city.currentWeather.weather[0].icon}.mp4`)"></video>
             <div class="bg-overlay">
-
             </div>
         </div>
     </div>
@@ -36,6 +35,13 @@ import db from '../firebase/firebaseinit';
                     })
                 }).then(()=>{
                     db.collection("cities").doc(this.id).delete();
+                this.$notify({
+                  group: 'foo',
+                  title: 'Info',
+                  type:'success',
+                  duration:5000,
+                  text: 'City has been deleted succesfully'
+                });
                 })
             },
             goToWeather(e){

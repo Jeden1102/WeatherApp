@@ -2,6 +2,11 @@
 <div>
   <div class="grid">
     <div class="city-link" v-for="(city,index) in cities" :key="index">
+      <div v-if="index==0" class="tap">
+        
+        
+        <p><i class="far fa-hand-point-up"></i>Tap to see weather  details</p>
+      </div>
       <City :city="city" :edit="edit"/>
     </div>
   </div>
@@ -24,6 +29,7 @@ export default {
 
   props : ['cities','edit'],
   created(){
+
   },
   components: {
     City
@@ -31,6 +37,7 @@ export default {
   methods: {
               addCity(){
                 this.$emit('add-city');
+
             },
   },
 }
@@ -77,6 +84,43 @@ button {
 }
 .city-link{
   cursor: pointer;
+  position: relative;
+}
+.tap{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+  z-index: 50;
+              background: rgba( 255, 255, 255, 0.3 );
+box-shadow: 0 4px 14px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 12px );
+-webkit-backdrop-filter: blur( 12px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+padding:8px;
+display:grid;
+place-content: center;
+i{
+font-size:40px;
+  animation:1.5s infinite tap;
+  margin:0 20px;
+
+}
+p{
+  white-space: nowrap;
+}
+}
+@keyframes tap{
+  0%{
+    transform: scale(1);
+  }
+  20%{
+    transform: scale(1.3);
+  }
+    100%{
+    transform: scale(1);
+  }
 }
 
 </style>
