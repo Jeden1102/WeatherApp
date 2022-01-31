@@ -35,4 +35,8 @@ export default {
     grid-template-columns: repeat(2,1fr);
   }
 }
+.city-link{
+  cursor: pointer;
+}
+
 </style>

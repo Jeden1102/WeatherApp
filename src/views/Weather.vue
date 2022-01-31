@@ -1,14 +1,29 @@
 <template>
-    <div>
-        <h4>Weather</h4>
+    <div class="main">
+        <div v-if="loading" class="loading">
+            <span></span>
+        </div>
+        <div v-if="!loading" class="weather" :class="{day:isDay,night:isNight}">
+            <div class="weather-wrap">
+                <CurrentWeather class="test" :currentWeather="currentWeather" :isDay="isDay" :isNight="isNight"/>
+                <HourlyWeather :forecast="forecast"/>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
 import db from "../firebase/firebaseinit";
+import HourlyWeather from "../components/HourlyWeather.vue";
+import CurrentWeather from "../components/CurrentWeather.vue";
     export default {
         name:"Weather",
+        props:["isDay","isNight"],
+        components:{
+            HourlyWeather,
+            CurrentWeather
+        },
         data(){
             return{
                 forecast:null,
@@ -23,7 +38,7 @@ import db from "../firebase/firebaseinit";
                 db.collection("cities").where('city',"==",`${this.$route.params.city}`).get().then((docs)=>{
                     docs.forEach(doc=>{
                         this.currentWeather = doc.data().currentWeather;
-                        axios.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.currentWeather.coord.lat}&lon=${this.currentWeather.coord.lon}&exclude=current,minutely&appid=${this.apiKey}`).then(res=>{
+                        axios.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.currentWeather.coord.lat}&lon=${this.currentWeather.coord.lon}&units=imperial&exclude=current,minutely&appid=${this.apiKey}`).then(res=>{
                             this.forecast = res.data;
                         }).then(()=>{
                             this.loading = false;
@@ -54,7 +69,47 @@ import db from "../firebase/firebaseinit";
 </script>
 
 <style lang="scss" scoped>
-    h4{
-        padding-top:100px;
+.test{
+        background: rgba( 255, 255, 255, 0.3 );
+box-shadow: 0 4px 14px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 12px );
+-webkit-backdrop-filter: blur( 12px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+padding:8px;
+margin:90px 2px 0 2px;;
+}
+.loading {
+  @keyframes spin {
+    to {
+      transform: rotateZ(360deg);
     }
+  }
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  span {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    border: 2px solid transparent;
+    border-top-color: #142a5f;
+    border-radius: 50%;
+    animation: spin ease 1000ms infinite;
+  }
+}
+.weather {
+  transition: 500ms ease;
+  overflow: scroll;
+  width: 100%;
+  height: 100%;
+  .weather-wrap {
+    overflow: hidden;
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+}
 </style>

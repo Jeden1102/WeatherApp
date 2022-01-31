@@ -1,7 +1,7 @@
 <template>
     <div class="city" @click="goToWeather">
         <i v-if="edit" @click="removeCity" class="far fa-trash-alt edit" ref="edit"></i>
-        <span>{{city.city}}</span>
+        <span  class="city-name">{{city.city}}</span>
         <div class="weather">
             <span>{{Math.round((this.city.currentWeather.main.temp-32)/1.8000)}}&deg;</span>
             <img :src="`http://openweathermap.org/img/wn/${city.currentWeather.weather[0].icon}@2x.png`" alt="">
@@ -50,6 +50,23 @@ import db from '../firebase/firebaseinit';
 </script>
 
 <style lang="scss" scoped>
+.city-name{
+    position: relative;
+}
+.city-name::after{
+    width:0%;
+    height:1px;
+    background: white;
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-5px;
+    transition: .3s;
+}
+.city:hover .city-name::after{
+    width:50%;
+
+}
 .city{
     display:Flex;
     position: relative;

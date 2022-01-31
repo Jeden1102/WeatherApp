@@ -1,9 +1,12 @@
 <template>
+<div class="bg">
   <div class="main" >
     <Navigation v-on:add-city="modalOpen = !modalOpen" v-on:edit-city="edit = !edit" :addCityActive="addCityActive" :isDay="isDay" :isNight="isNight"/>
     <Modal  v-if="modalOpen" v-on:close-modal="modalOpen = !modalOpen" />
-    <router-view :cities="cities" :edit="edit" v-on:is-day="isDay = !isDay" v-on:is-night="isNight = !isNight" v-on:resetDays="resetDays" />
+    <router-view :cities="cities" :edit="edit" v-on:is-day="isDay = !isDay" v-on:is-night="isNight = !isNight" v-on:resetDays="resetDays" :isDay="isDay" :isNight="isNight"/>
   </div>
+</div>
+
 </template>
 <script>
 import axios from 'axios';
@@ -80,6 +83,23 @@ export default {
 }
 </script>
 <style lang="scss">
+    .day {
+  transition: 500ms ease all;
+  background-color: rgb(59, 150, 249);
+    box-shadow:0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.1);
+
+}
+.night {
+  transition: 500ms ease all;
+  background-color: rgb(20, 42, 95);
+    box-shadow:0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.1);
+
+}
+body{
+  width:100%;
+  height:100%;
+  background: #414857;
+}
 *{
   margin:0;
   padding:0;
