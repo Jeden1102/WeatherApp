@@ -13,9 +13,10 @@ import axios from 'axios';
 import db from "../firebase/firebaseinit";
     export default {
      name:"modal",
+    props:["cities"],
      data(){
          return{
-             city:null,
+             city:"",
             apiKey : "ffce0cb1622ed4c6cc1ba7238e3dd846",
          }
      },
@@ -26,9 +27,17 @@ import db from "../firebase/firebaseinit";
 
          },
          async addCity(){
-             if(this.city.length==0){
+           console.log(this.cities);
+             if(this.city === ""){
+               alert("Input field cannot be empty");
                  return false
              }
+             let test = this.cities.filter(el=>el.city == this.city);
+             if(test.length != 0){
+               alert(`We are sorry...${this.city} already exists in your app.`);
+               return false;
+             }
+             try{
              const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=imperial&appid=${this.apiKey}&lang=pl`);
              const data = await res.data;
              db.collection('cities').doc().set({
@@ -37,8 +46,13 @@ import db from "../firebase/firebaseinit";
              }).then(()=>{
                 this.$emit('close-modal');
              })
+             }catch(err){
+               alert(`We are sory...${this.city}, does not exist in our record. Please try again.`)
+             }
+
              
-         }
+         },
+
      },
     }
 </script>

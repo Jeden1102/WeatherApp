@@ -1,9 +1,15 @@
 <template>
 <div class="bg">
   <div class="main" >
+    <div class="loading" v-if="isLoading">
+      <span></span>
+    </div>
+    <div class="app" v-else>
     <Navigation v-on:add-city="modalOpen = !modalOpen" v-on:edit-city="edit = !edit" :addCityActive="addCityActive" :isDay="isDay" :isNight="isNight"/>
-    <Modal  v-if="modalOpen" v-on:close-modal="modalOpen = !modalOpen" />
-    <router-view :cities="cities" :edit="edit" v-on:is-day="isDay = !isDay" v-on:is-night="isNight = !isNight" v-on:resetDays="resetDays" :isDay="isDay" :isNight="isNight"/>
+    <Modal  v-if="modalOpen" v-on:close-modal="modalOpen = !modalOpen" :cities="cities" />
+    <router-view :cities="cities" :edit="edit" v-on:is-day="isDay = !isDay" v-on:is-night="isNight = !isNight" v-on:resetDays="resetDays" :isDay="isDay" :isNight="isNight" v-on:add-city="modalOpen = !modalOpen"/>
+    </div>
+
   </div>
 </div>
 
@@ -31,12 +37,16 @@ export default {
       modalOpen:false,
       edit:false,
       addCityActive:null,
+      isLoading:true,
     }
   },
   methods: {
     getCityWeather(){
       let firebaseDb = db.collection("cities");
       firebaseDb.onSnapshot((snap)=>{
+        if(snap.docs.length ==0){
+          this.isLoading = false;
+        }
         snap.docChanges().forEach(async(doc)=>{
           if(doc.type === "added" && !doc.doc.Nd){
             try{
@@ -46,6 +56,7 @@ export default {
                 currentWeather : data
               }).then(()=>{
                 this.cities.push(doc.doc.data());
+                this.isLoading =false;
               })
             }catch(err){ 
               console.log(err);
@@ -83,6 +94,28 @@ export default {
 }
 </script>
 <style lang="scss">
+.loading {
+  @keyframes spin {
+    to {
+      transform: rotateZ(360deg);
+    }
+  }
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  span {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    border: 2px solid transparent;
+    border-top-color: #142a5f;
+    border-radius: 50%;
+    animation: spin ease 1000ms infinite;
+  }
+}
     .day {
   transition: 500ms ease all;
   background-color: rgb(59, 150, 249);
