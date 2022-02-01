@@ -2,9 +2,7 @@
 <div>
   <div class="grid">
     <div class="city-link" v-for="(city,index) in cities" :key="index">
-      <div v-if="index==0" class="tap">
-        
-        
+      <div v-if="index==0" class="tap" @click="goToWeather(city)">
         <p><i class="far fa-hand-point-up"></i>Tap to see weather  details</p>
       </div>
       <City :city="city" :edit="edit"/>
@@ -39,6 +37,9 @@ export default {
                 this.$emit('add-city');
 
             },
+            goToWeather(city){
+              this.$router.push({name:"Weather",params:{city:city.city}})
+            }
   },
 }
 </script>

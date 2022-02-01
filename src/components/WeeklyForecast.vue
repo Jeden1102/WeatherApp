@@ -2,7 +2,7 @@
     <div class="weekly-forecast">
         <div class="container">
             <div class="daily" v-for="(day,index) in filteredList" :key="index">
-                <DailyForecast :day="day"/>
+                <DailyForecast v-on:show-details-modal="showDetailsModal(day)" :day="day"/>
             </div>
         </div>
     </div>
@@ -25,7 +25,12 @@ import DailyForecast from '@/components/DailyForecast.vue';
             filteredList(){
                 return this.forecast.daily.slice(1,8);
             }
-        }
+        },
+        methods: {
+            showDetailsModal(day){
+                this.$emit('show-details-modal',day);
+            }
+        },
     }
 </script>
 

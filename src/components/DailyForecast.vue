@@ -1,7 +1,7 @@
 <template>
     <div class="daily-forecast">
         <div>
-            <span>{{betterDate}}</span>
+            <span><i class="fas fa-calendar-day mar"></i>{{betterDate}}</span>
         </div>
         <div class="condition">
             <img :src="`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`" alt="">
@@ -9,6 +9,9 @@
         <div class="weather">
             <span class="high">{{Math.round((day.temp.max-32)/1.8000)}}&deg;</span>
             <span class="low">{{Math.round((day.temp.min-32)/1.8000)}}&deg;</span>
+        </div>
+        <div>
+            <button @click="showDetailsModal(day)" class="btnx">Details <i class="far fa-eye "></i></button>
         </div>
     </div>
 </template>
@@ -25,7 +28,12 @@
                 old = old.substring(0,old.length-5);
                 return `${old} ${dayCapitalize}`;
             }
-        }
+        },
+        methods: {
+            showDetailsModal(day){
+                this.$emit(`show-details-modal`,day);
+            }
+        },
     }
 </script>
 
@@ -42,6 +50,20 @@ backdrop-filter: blur( 12px );
 border-radius: 10px;
 border: 1px solid rgba( 255, 255, 255, 0.18 );
 padding:8px;
+.mar{
+    margin-right:4px;
+}
+.btnx{
+    margin:0 4px;
+    padding:7px;
+    border-radius: 3px;
+    border:none;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    gap:4px;
+}
     div{
         flex:1;
     }

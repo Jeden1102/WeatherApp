@@ -7,8 +7,9 @@
             <div class="weather-wrap">
                 <CurrentWeather class="test" :currentWeather="currentWeather" :isDay="isDay" :isNight="isNight"/>
                 <HourlyWeather :forecast="forecast"/>
-                <WeeklyForecast :forecast="forecast"/>
+                <WeeklyForecast v-on:show-details-modal="showDetailsModal($event)" :forecast="forecast"/>
                 <AdditionalInfo :currentWeather="currentWeather"/>
+                <ModalDetails :singleDayDetails="singleDayDetails" v-on:close-details-modal="modalDetailsOpen = !modalDetailsOpen" v-if="modalDetailsOpen" class="modal"/>
             </div>
         </div>
     </div>
@@ -21,6 +22,7 @@ import HourlyWeather from "../components/HourlyWeather.vue";
 import CurrentWeather from "../components/CurrentWeather.vue";
 import WeeklyForecast from "../components/WeeklyForecast.vue";
 import AdditionalInfo from "../components/AdditionalInfo.vue";
+import ModalDetails from "../components/ModalDetails.vue";
     export default {
         name:"Weather",
         props:["isDay","isNight"],
@@ -28,7 +30,8 @@ import AdditionalInfo from "../components/AdditionalInfo.vue";
             HourlyWeather,
             CurrentWeather,
             WeeklyForecast,
-            AdditionalInfo
+            AdditionalInfo,
+            ModalDetails
         },
         data(){
             return{
@@ -37,6 +40,8 @@ import AdditionalInfo from "../components/AdditionalInfo.vue";
                 currentTime:null,
                 loading:true,
                  apiKey : "ffce0cb1622ed4c6cc1ba7238e3dd846",
+                 modalDetailsOpen:false,
+                 singleDayDetails:null,
             }
         },
         methods: {
@@ -44,7 +49,7 @@ import AdditionalInfo from "../components/AdditionalInfo.vue";
                 db.collection("cities").where('city',"==",`${this.$route.params.city}`).get().then((docs)=>{
                     docs.forEach(doc=>{
                         this.currentWeather = doc.data().currentWeather;
-                        axios.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.currentWeather.coord.lat}&lon=${this.currentWeather.coord.lon}&units=imperial&exclude=current,minutely&appid=${this.apiKey}`).then(res=>{
+                        axios.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.currentWeather.coord.lat}&lon=${this.currentWeather.coord.lon}&lang=pl&units=imperial&appid=${this.apiKey}`).then(res=>{
                             this.forecast = res.data;
                         }).then(()=>{
                             this.loading = false;
@@ -63,6 +68,11 @@ import AdditionalInfo from "../components/AdditionalInfo.vue";
                 }else{
                     this.$emit("is-night");
                 }
+            },
+            showDetailsModal(event){
+                this.modalDetailsOpen = !this.modalDetailsOpen;
+                this.singleDayDetails = event;
+                console.log(this.singleDayDetails);
             }
         },
         mounted(){
@@ -75,6 +85,23 @@ import AdditionalInfo from "../components/AdditionalInfo.vue";
 </script>
 
 <style lang="scss" scoped>
+.main{
+    position:relative;
+}
+.modal{
+    position: fixed;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+            background: rgba( 255, 255, 255, 0.3 );
+box-shadow: 0 4px 14px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 12px );
+-webkit-backdrop-filter: blur( 12px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+padding:8px;
+    z-index:999;
+}
 .test{
         background: rgba( 255, 255, 255, 0.3 );
 box-shadow: 0 4px 14px 0 rgba( 31, 38, 135, 0.37 );
