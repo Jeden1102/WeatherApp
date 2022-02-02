@@ -4,7 +4,7 @@
         <span  class="city-name">{{city.city}}</span>
         <div class="weather">
             <span>{{Math.round((this.city.currentWeather.main.temp-32)/1.8000)}}&deg;</span>
-            <img :src="`http://openweathermap.org/img/wn/${city.currentWeather.weather[0].icon}@2x.png`" alt="">
+            <img :src="`../../public/conditions/${city.currentWeather.weather[0].icon}@2x.png`" alt="">
         </div>
         <div class="video">
             <video autoplay muted loop :src="require(`../../public/videos/${city.currentWeather.weather[0].icon}.mp4`)"></video>

@@ -1,6 +1,7 @@
 <template>
     <div class="modal">
-        <h3><i class="fas fa-calendar-day mar"></i>{{ betterDate }}</h3>
+        <h3><i class="fas fa-calendar-day mar"></i>{{ betterDate }} </h3>
+        <h4>{{singleDayDetails.weather[0].description}} <img :src="`http://openweathermap.org/img/wn/${singleDayDetails.weather[0].icon}@2x.png`" alt=""></h4>
         <button @click="closeDetailsModal"><i class="far fa-window-close"></i></button>
         <div class="flex">
             <div class="box">
@@ -24,6 +25,29 @@
                 <span class="strong">{{Math.round((singleDayDetails.temp.night-32)/1.8000)}}&deg;/{{Math.round((singleDayDetails.feels_like.night-32)/1.8000)}}&deg;</span>
             </div>
         </div>
+            <div class="addition-info container">
+        <div>
+            <span>Sunrise <i class="fas fa-sun yellow"></i></span>
+            <span>{{new Date(singleDayDetails.sunrise*1000).toLocaleTimeString()}}</span>
+        </div>
+        <div>
+            <span>Sunset <i class="fas fa-moon"></i></span>
+            <span>{{new Date(singleDayDetails.sunset*1000).toLocaleTimeString()}}</span>
+        </div>
+        <div>
+            <span>Humidity <i class="fas fa-tint"></i></span>
+            <span>{{singleDayDetails.humidity}}%</span>
+        </div>
+        <div>
+            <span>Cloudness <i class="fas fa-cloud"></i></span>
+            <span>{{singleDayDetails.clouds}}%</span>
+        </div>
+        <div>
+            <span>Wind <i class="fas fa-wind"></i></span>
+            <span>{{Math.round(singleDayDetails.wind_speed)}}mph</span>
+        </div>
+
+    </div>
     </div>
 </template>
 
@@ -49,6 +73,36 @@
 </script>
 
 <style lang="scss" scoped>
+.addition-info{
+    padding:30px 20px;
+    display:flex;
+    flex-wrap:wrap;
+    color:White;
+    
+    div{
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        flex-basis:40%;
+        margin:10px 5px;
+        background: rgba( 255, 255, 255, 0.3 );
+        box-shadow: 0 4px 14px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 12px );
+        -webkit-backdrop-filter: blur( 12px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+        padding:8px;
+        color:black;
+        span:nth-child(1){
+            font-size:14px;
+            margin-bottom:8px;
+        }
+                span:nth-child(2){
+            font-weight:600;
+        }
+    }
+}
 .mar{
     margin-right:4px;
 }
@@ -85,6 +139,14 @@
 }
 .modal{
     min-width:90vw;
+    img{
+        width:70px;
+    }
+}
+h4{
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
 h3{
     position:relative;
