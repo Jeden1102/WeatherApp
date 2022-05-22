@@ -1,24 +1,24 @@
-# weatherapp
+# WeatherApp
 
-## Project setup
-```
-npm install
-```
+What a portfolio would it be without and WeatherApp ? I've decided  to do this project to improve my skills in working with APIs. It was based on some youtube tutorial, but I've did some personal changes so I decided to place it in my portfolio as well.
 
-### Compiles and hot-reloads for development
-```
+# Technologies used
+
+Vue, axios, tailwind, fireabase
+
+## Installation
+
+```bash
+npm run install
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Live version
 
-### Lints and fixes files
-```
-npm run lint
-```
+See me live !
+https://dominikraducki.works/WeatherApp/
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
